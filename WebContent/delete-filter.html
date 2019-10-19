@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Label</title>
+		<title>Delete Filter</title>
  		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 		<script src="lib/angjs.js"></script>
 		<script src="js/side-nav-bar.js"></script>
 		<div ng-include="'commons/load-libs.html'"></div>
+		<div ng-include="'dialog/delete-filter.html'"></div>
 	</head>
 	<body ng-app="">
         <div class="jumbotron col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
@@ -17,7 +18,7 @@
 					<div class="input-group">
 						<div class="input-group-btn">
 							<button type="button" class="btn btn-default disabled" aria-label="Left Align">
-								Labels
+								Delete Filter
 							</button>
 							<button type="button" class="btn btn-default" aria-label="Left Align">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -25,8 +26,8 @@
 						</div>
 						<input type="text" class="form-control" aria-label="..." placeholder="Search...">
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-								Create New Label
+							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal">
+								Create New Filter
 							</button>
 						</div>
 					</div>
@@ -57,18 +58,24 @@
 										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
 											Delete
 										</button>
+										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+											Run
+										</button>
 									</td>
 								</tr>
 								<tr>
-									<td style="vertical-align: middle;">1</td>
+									<td style="vertical-align: middle;">2</td>
 									<td style="vertical-align: middle;">Important Emails</td>
 									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
 									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal">
 											Edit
 										</button>
 										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
 											Delete
+										</button>
+										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
+											Run
 										</button>
 									</td>
 								</tr>
@@ -78,6 +85,8 @@
 					</div>
 				</div>
 			</div>
+			
+			<div ng-include="'dialog/delete-filter-dialog.html'"></div>
 		</div>
 		<!-- Following jquery script must be load in each .html page -->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
