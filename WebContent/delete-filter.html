@@ -6,9 +6,9 @@
 		<script src="lib/angjs.js"></script>
 		<script src="js/side-nav-bar.js"></script>
 		<div ng-include="'commons/load-libs.html'"></div>
-		<div ng-include="'dialog/delete-filter.html'"></div>
+		<script src="js/delete-filter.js"></script>
 	</head>
-	<body ng-app="">
+	<body ng-app="" onload="onPageLoad()">
         <div class="jumbotron col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
 			<div ng-include="'commons/nav-bar.html'"></div>
 			<div ng-include="'commons/side-nav-bar.html'"></div>
@@ -86,8 +86,88 @@
 				</div>
 			</div>
 			
-			<div ng-include="'dialog/delete-filter-dialog.html'"></div>
+			<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Edit</h4>
+						</div>
+						<div class="modal-body">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="labelName">Select Label</label>
+										<select class="form-control" id="labelName" name="labelName">
+											<option>Label-1</option>
+											<option>Label-2</option>
+											<option>Label-3</option>
+											<option>Label-4</option>
+										</select>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Email Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="isEmailFilter" name="isEmailFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="emailIds" id="emailIds" placeholder="Enter comma (,) separated email id's">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated email id's (For ex: abcd@example.com, pqrs@example.com)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+			
+									<div class="form-group">
+										<label for="emailFilter">Subject Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="isSubjectFilter" name="isSubjectFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="subjectKeywords" id="subjectKeywords" placeholder="Enter comma (,) separated keywords">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated keywords which will occur in subject (For ex: keyword1, keyword2)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Body Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="isBodyFilter" name="isBodyFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="bodyKeywords" id="bodyKeywords" placeholder="Enter comma (,) separated keywords">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated keywords which will occur in body (For ex: keyword1, keyword2)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" onclick="deleteFilterService()">Save</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+		
 		<!-- Following jquery script must be load in each .html page -->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 		<div ng-include="'commons/after-load-lib.html'"></div>	
