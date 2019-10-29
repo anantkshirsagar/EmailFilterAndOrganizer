@@ -6,75 +6,24 @@
 		<script src="lib/angjs.js"></script>
 		<script src="js/side-nav-bar.js"></script>
 		<div ng-include="'commons/load-libs.html'"></div>
+		<link href="js/cover.css" rel="stylesheet">
+		
+		<!-- Google api for gmail integration -->
+		<meta name="google-signin-client_id" content="751114025630-eph7m0437nntkq7sk5t8ps8arqhph275.apps.googleusercontent.com">
+		<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+		<script src="js/google-api-signing.js"></script>
 	</head>
 	<body ng-app="">
-        <div class="jumbotron col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
-			<div ng-include="'commons/nav-bar.html'"></div>
-			<div ng-include="'commons/side-nav-bar.html'"></div>
-			
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="input-group">
-						<div class="input-group-btn">
-							<button type="button" class="btn btn-default disabled" aria-label="Left Align">
-								Labels
-							</button>
-							<button type="button" class="btn btn-default" aria-label="Left Align">
-								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							</button>
-						</div>
-						<input type="text" class="form-control" aria-label="..." placeholder="Search...">
-						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-								Create New Label
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="table-responsive">
-						<table class="table table-striped valign">
-							<thead>
-								<tr>
-									<th>Sr No.</th>
-									<th>Label Name</th>
-									<th>Creation Date</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td style="vertical-align: middle;">1</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-									</td>
-								</tr>
-								<tr>
-									<td style="vertical-align: middle;">1</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
+		<div class="site-wrapper">
+			<div class="site-wrapper-inner">
+				<div class="cover-container">
+					<div class="inner cover">
+						<h1 class="cover-heading">Email Filter And Organizer</h1>
+						<p class="lead">Organize your emails with our Email Organizer web application. <br>Login to your gmail account, and start organizing.</p>
+						<p class="lead">
+							<!-- <center><div class="g-signin2" id="my-signin2" data-onsuccess="onSignIn"></div></center> -->
+							<center><div class="g-signin2" data-onsuccess="onSignIn"></div></center>
+						</p>
 					</div>
 				</div>
 			</div>

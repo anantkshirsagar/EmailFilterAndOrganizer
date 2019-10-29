@@ -16,10 +16,17 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li>
 					<a href="#">
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Nsg Academy Admin&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<span id="currentUsername"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
 					</a>
 				</li>
 			</ul>
 		</div>
 	</div>
 </nav>
+
+<script>
+	function setCurrentUsername(){
+		document.getElementById("currentUsername").innerHTML = sessionStorage.getItem("name");
+	}
+	setCurrentUsername();
+</script>
