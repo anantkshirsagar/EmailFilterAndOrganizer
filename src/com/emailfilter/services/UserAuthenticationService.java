@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.emailfilter.constants.GmailAuth;
 import com.google.api.client.auth.oauth2.Credential;
@@ -18,11 +20,11 @@ import com.google.api.services.gmail.GmailScopes;
 
 public class UserAuthenticationService {
 
-	private static final Logger LOG = Logger.getLogger(UserAuthenticationService.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(UserAuthenticationService.class.getName());
 	private static final java.util.List<String> SCOPES = Collections.singletonList(GmailScopes.MAIL_GOOGLE_COM);
 
 	public Credential getCredentials(final NetHttpTransport httpTransport) throws Exception {
-		LOG.info("Checking credentials...");
+		LOG.debug("Checking credentials...");
 		InputStream in = UserAuthenticationService.class.getResourceAsStream(GmailAuth.CREDENTIALS_FILE_PATH);
 		if (in == null) {
 			throw new FileNotFoundException("Resource not found: " + GmailAuth.CREDENTIALS_FILE_PATH);

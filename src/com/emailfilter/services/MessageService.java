@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.emailfilter.model.GmailMessage;
 import com.google.api.services.gmail.Gmail;
@@ -20,7 +21,7 @@ import com.google.api.services.gmail.model.Message;
 
 public class MessageService {
 
-	private static final Logger LOG = Logger.getLogger(MessageService.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(LabelService.class.getName());
 	private final String userEmailId;
 	private final Gmail gmailService;
 
@@ -30,17 +31,18 @@ public class MessageService {
 	}
 
 	public List<Message> getMessagesByLabelIds(List<String> labelIds) throws Exception {
-		LOG.info("Label Ids " + labelIds);
-		ListMessagesResponse response = gmailService.users().messages().list(userEmailId).setLabelIds(labelIds).execute();
-		LOG.info("Response " + response);
+		LOG.debug("Label Ids {}", labelIds);
+		ListMessagesResponse response = gmailService.users().messages().list(userEmailId).setLabelIds(labelIds)
+				.execute();
+		LOG.debug("Response {}", response);
 
 		List<Message> messages = new ArrayList<Message>();
 		while (response.getMessages() != null) {
 			messages.addAll(response.getMessages());
 			if (response.getNextPageToken() != null) {
 				String pageToken = response.getNextPageToken();
-				response = gmailService.users().messages().list(userEmailId).setLabelIds(labelIds).setPageToken(pageToken)
-						.execute();
+				response = gmailService.users().messages().list(userEmailId).setLabelIds(labelIds)
+						.setPageToken(pageToken).execute();
 			} else {
 				break;
 			}
@@ -49,14 +51,13 @@ public class MessageService {
 	}
 
 	public MimeMessage getMimeMessage(String messageId) throws Exception {
-		LOG.info("Message Id: " + messageId);
+		LOG.debug("Message id: {}", messageId);
 		Message message = gmailService.users().messages().get(userEmailId, messageId).setFormat("raw").execute();
 		Base64 base64Url = new Base64(true);
 		byte[] emailBytes = base64Url.decodeBase64(message.getRaw());
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
-		MimeMessage email = new MimeMessage(session, new ByteArrayInputStream(emailBytes));
-		return email;
+		return new MimeMessage(session, new ByteArrayInputStream(emailBytes));
 	}
 
 	public GmailMessage getGmailMessage(MimeMessage mimeMessage) throws MessagingException {
@@ -67,6 +68,7 @@ public class MessageService {
 		gmailMessage.setReplyTo(Arrays.asList(mimeMessage.getReplyTo()));
 		gmailMessage.setSentDate(mimeMessage.getSentDate());
 		gmailMessage.setSubject(mimeMessage.getSubject());
+		LOG.debug("Gmail message {},", gmailMessage);
 		return gmailMessage;
 	}
 }
