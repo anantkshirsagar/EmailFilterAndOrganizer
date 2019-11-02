@@ -7,14 +7,15 @@ import com.emailfilter.services.LabelService;
 import com.google.api.services.gmail.model.Label;
 
 public class LabelServiceTest {
+	
 	public static void main(String[] args) throws Exception {
-		printGmailLabelsTest();
-		// createGmailLabelTest();
+		//printGmailLabelsTest();
+		createGmailLabelTest();
 	}
 
 	public static void createGmailLabelTest() throws Exception {
 		LabelService labelService = new LabelService("icbm.iot@gmail.com", new GmailService().getGmailService());
-		Label createLabel = labelService.createLabel("Anant Kshirsagar");
+		Label createLabel = labelService.createLabel("Demo/demo2/test01");
 		System.out.println(" label id: " + createLabel.getId());
 	}
 
