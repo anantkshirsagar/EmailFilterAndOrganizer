@@ -9,21 +9,30 @@ import com.google.api.services.gmail.model.Label;
 public class LabelServiceTest {
 	
 	public static void main(String[] args) throws Exception {
-		//printGmailLabelsTest();
-		createGmailLabelTest();
+//		printGmailLabelsTest();
+		printUserDefinedLabels();
+		//createGmailLabelTest();
 	}
 
 	public static void createGmailLabelTest() throws Exception {
 		LabelService labelService = new LabelService("icbm.iot@gmail.com", new GmailService().getGmailService());
-		Label createLabel = labelService.createLabel("Demo/demo2/test01");
+		Label createLabel = labelService.createLabel("suyog/anant");
 		System.out.println(" label id: " + createLabel.getId());
 	}
 
 	public static void printGmailLabelsTest() throws Exception {
 		LabelService labelService = new LabelService("icbm.iot@gmail.com", new GmailService().getGmailService());
-		List<Label> labels = labelService.getLabels();
+		List<Label> labels = labelService.getAllLabels();
 		for (Label label : labels) {
 			System.out.println("Id: " + label.getId() + "  Name: " + label.getName());
+		}
+	}
+	
+	public static void printUserDefinedLabels() throws Exception {
+		LabelService labelService = new LabelService("icbm.iot@gmail.com", new GmailService().getGmailService());
+		List<Label> filteredLabel = labelService.getFilteredLabel();
+		for (Label label : filteredLabel) {
+			System.out.println("ID: " + label.getId() + "Label name: " +label.getName());
 		}
 	}
 
