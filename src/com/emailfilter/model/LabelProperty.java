@@ -1,8 +1,28 @@
 package com.emailfilter.model;
 
-public class LabelProperty {
+import java.io.Serializable;
+
+public class LabelProperty implements Serializable {
+
+	private int id;
+	private String userEmailId;
 	private String label;
-	private String parentLabel;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUserEmailId() {
+		return userEmailId;
+	}
+
+	public void setUserEmailId(String userEmailId) {
+		this.userEmailId = userEmailId;
+	}
 
 	public String getLabel() {
 		return label;
@@ -12,21 +32,15 @@ public class LabelProperty {
 		this.label = label;
 	}
 
-	public String getParentLabel() {
-		return parentLabel;
-	}
-
-	public void setParentLabel(String parentLabel) {
-		this.parentLabel = parentLabel;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("LabelProperties [label=");
+		builder.append("LabelProperty [id=");
+		builder.append(id);
+		builder.append(", userEmailId=");
+		builder.append(userEmailId);
+		builder.append(", label=");
 		builder.append(label);
-		builder.append(", parentLabel=");
-		builder.append(parentLabel);
 		builder.append("]");
 		return builder.toString();
 	}

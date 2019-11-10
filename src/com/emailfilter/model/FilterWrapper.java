@@ -1,13 +1,26 @@
 package com.emailfilter.model;
 
-public class FilterWrapper {
+import java.io.Serializable;
+import java.util.List;
+
+public class FilterWrapper implements Serializable {
+
+	private int id;
 	private String label;
 	private boolean isEmailFilter;
-	private String emailIds;
+	private List<String> emailIds;
 	private boolean isSubjectFilter;
-	private String subjectKeywords;
+	private List<String> subjectKeywords;
 	private boolean isBodyFilter;
-	private String bodyKeywords;
+	private List<String> bodyKeywords;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getLabel() {
 		return label;
@@ -25,11 +38,11 @@ public class FilterWrapper {
 		this.isEmailFilter = isEmailFilter;
 	}
 
-	public String getEmailIds() {
+	public List<String> getEmailIds() {
 		return emailIds;
 	}
 
-	public void setEmailIds(String emailIds) {
+	public void setEmailIds(List<String> emailIds) {
 		this.emailIds = emailIds;
 	}
 
@@ -41,11 +54,11 @@ public class FilterWrapper {
 		this.isSubjectFilter = isSubjectFilter;
 	}
 
-	public String getSubjectKeywords() {
+	public List<String> getSubjectKeywords() {
 		return subjectKeywords;
 	}
 
-	public void setSubjectKeywords(String subjectKeywords) {
+	public void setSubjectKeywords(List<String> subjectKeywords) {
 		this.subjectKeywords = subjectKeywords;
 	}
 
@@ -57,18 +70,20 @@ public class FilterWrapper {
 		this.isBodyFilter = isBodyFilter;
 	}
 
-	public String getBodyKeywords() {
+	public List<String> getBodyKeywords() {
 		return bodyKeywords;
 	}
 
-	public void setBodyKeywords(String bodyKeywords) {
+	public void setBodyKeywords(List<String> bodyKeywords) {
 		this.bodyKeywords = bodyKeywords;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("DeleteFilterWrapper [label=");
+		builder.append("FilterWrapper [id=");
+		builder.append(id);
+		builder.append(", label=");
 		builder.append(label);
 		builder.append(", isEmailFilter=");
 		builder.append(isEmailFilter);

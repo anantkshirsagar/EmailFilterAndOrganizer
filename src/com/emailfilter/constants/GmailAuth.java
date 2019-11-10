@@ -9,7 +9,7 @@ public final class GmailAuth {
 	public static final String TOKENS_DIRECTORY_PATH = "tokens";
 	public static final String CREDENTIALS_FILE_PATH = "/google-credentials/google-client-credentials.json";
 	
-	public static final int PORT = 7070;
+	public static final int PORT = 9090;
 	
 	public enum MessageVisibility {
 		SHOW, HIDE

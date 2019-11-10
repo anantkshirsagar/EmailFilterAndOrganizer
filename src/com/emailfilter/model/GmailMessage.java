@@ -1,10 +1,12 @@
 package com.emailfilter.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.mail.Address;
 
-public class GmailMessage {
+public class GmailMessage implements Serializable {
+	
 	private String subject;
 	private List<Address> from;
 	private List<Address> allRecipients;

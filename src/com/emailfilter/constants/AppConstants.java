@@ -18,4 +18,7 @@ public class AppConstants {
 	public enum DATABASE_TYPE {
 		MYSQL, PSQL
 	}
+	
+	public static final String COMMA = ",";
+	public static final String MINUS_ONE = "-1";
 }
