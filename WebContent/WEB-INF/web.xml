@@ -12,12 +12,12 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	
+
 	<servlet>
 		<servlet-name>CreateLabelServlet</servlet-name>
 		<servlet-class>com.emailfilter.servlets.CreateLabelServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>CreateLabelServlet</servlet-name>
 		<url-pattern>/CreateLabelServlet</url-pattern>
@@ -27,19 +27,33 @@
 		<servlet-name>DeleteFilterServlet</servlet-name>
 		<servlet-class>com.emailfilter.servlets.DeleteFilterServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>DeleteFilterServlet</servlet-name>
 		<url-pattern>/DeleteFilterServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>LabelFilterServlet</servlet-name>
 		<servlet-class>com.emailfilter.servlets.LabelFilterServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>LabelFilterServlet</servlet-name>
 		<url-pattern>/LabelFilterServlet</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
+
+	<listener>
+		<listener-class>com.emailfilter.services.listeners.AppServletContextListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>SyncLabelServlet</servlet-name>
+		<servlet-class>com.emailfilter.servlets.SyncLabelServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SyncLabelServlet</servlet-name>
+		<url-pattern>/SyncLabelServlet</url-pattern>
+	</servlet-mapping>
 </web-app>

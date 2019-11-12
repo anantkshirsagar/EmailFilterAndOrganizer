@@ -1,32 +1,53 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">
-				<!-- <img alt="Brand" src="images/gmail-icon.png"> -->
+			<a class="navbar-brand" href="#"> <!-- <img alt="Brand" src="images/gmail-icon.png"> -->
 				<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;&nbsp;Gmail
 			</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li>
-					<a href="#">
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<span id="currentUsername"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-					</a>
-				</li>
+				<li><a href="#"> <span>
+							<button type="button" class="btn btn-default"
+								aria-label="Left Align" onclick="syncLabelService()">
+								Sync Labels</button>
+					</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-user"
+						aria-hidden="true"></span>&nbsp;&nbsp;<span id="currentUsername"></span>&nbsp;&nbsp;<span
+						class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+				</a></li>
 			</ul>
 		</div>
 	</div>
 </nav>
 
 <script>
-	function setCurrentUsername(){
-		document.getElementById("currentUsername").innerHTML = sessionStorage.getItem("name");
+	function setCurrentUsername() {
+		document.getElementById("currentUsername").innerHTML = sessionStorage
+				.getItem("name");
 	}
 	setCurrentUsername();
+
+	function syncLabelService() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var message = xhttp.getResponseHeader("message");
+				alert(message);
+			} else if(this.status == 500){
+				var message = xhttp.getResponseHeader("message");
+				alert(message);
+			}
+		};
+		xhttp.open("POST", "SyncLabelServlet", true);
+		xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
+		xhttp.setRequestHeader("callType", "SYNC_LABEL_SERVICE");
+		xhttp.send();
+	}
 </script>

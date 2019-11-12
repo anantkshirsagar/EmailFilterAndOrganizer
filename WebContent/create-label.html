@@ -24,9 +24,9 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</div>
-						<input type="text" class="form-control" aria-label="..." placeholder="Search...">
+						<input type="text" class="form-control" onchange="getLabelGridInfoService(this.value)" aria-label="..." placeholder="Search...">
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal">
+							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal" onclick="clearInputs()">
 								Create New Label
 							</button>
 						</div>
@@ -37,44 +37,7 @@
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<div class="table-responsive">
-						<table class="table table-striped valign">
-							<thead>
-								<tr>
-									<th>Sr No.</th>
-									<th>Label Name</th>
-									<th>Creation Date</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td style="vertical-align: middle;">1</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-									</td>
-								</tr>
-								<tr>
-									<td style="vertical-align: middle;">1</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-									</td>
-								</tr>
-								
-							</tbody>
+						<table class="table table-striped valign" id="printTable">
 						</table>
 					</div>
 				</div>
@@ -98,11 +61,7 @@
 									</div>
 									<div class="form-group">
 										<label for="parentLabel">Parent Label</label>
-										<select class="form-control" name="parentLabel" id="parentLabel">
-											<option>Label-1</option>
-											<option>Label-2</option>
-											<option>Label-3</option>
-											<option>Label-4</option>
+										<select class="form-control" name="parentLabelId" id="parentLabelId">
 										</select>						
 									</div>
 								</div>
