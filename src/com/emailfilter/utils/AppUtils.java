@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.dbmanager.objectify.Objectify;
 import com.emailfilter.constants.AppConstants;
 import com.emailfilter.constants.FilterLabels;
+import com.emailfilter.model.LabelProperty;
 import com.google.api.services.gmail.model.Label;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -111,5 +112,11 @@ public class AppUtils {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Cache-Control", "no-cache");
+	}
+
+	public static void validateAndSetParentLabel(LabelProperty labelProperty) {
+		if (isStringNotEmpty(labelProperty.getGmailParentLabelId())) {
+			labelProperty.setLabel(labelProperty.getGmailParentLabelId().concat("/").concat(labelProperty.getLabel()));
+		}
 	}
 }

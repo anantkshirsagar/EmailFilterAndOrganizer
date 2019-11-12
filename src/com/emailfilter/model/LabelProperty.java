@@ -7,6 +7,7 @@ public class LabelProperty implements Serializable {
 	private int id;
 	private String userEmailId;
 	private String label;
+	private String gmailParentLabelId;
 
 	public int getId() {
 		return id;
@@ -32,6 +33,14 @@ public class LabelProperty implements Serializable {
 		this.label = label;
 	}
 
+	public String getGmailParentLabelId() {
+		return gmailParentLabelId;
+	}
+
+	public void setGmailParentLabelId(String gmailParentLabelId) {
+		this.gmailParentLabelId = gmailParentLabelId;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -41,6 +50,8 @@ public class LabelProperty implements Serializable {
 		builder.append(userEmailId);
 		builder.append(", label=");
 		builder.append(label);
+		builder.append(", gmailParentLabelId=");
+		builder.append(gmailParentLabelId);
 		builder.append("]");
 		return builder.toString();
 	}

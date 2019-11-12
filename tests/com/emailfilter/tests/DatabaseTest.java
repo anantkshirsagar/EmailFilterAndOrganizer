@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import com.emailfilter.dbservices.LabelDBService;
 import com.emailfilter.dbservices.LabelFilterDBService;
 import com.emailfilter.exceptions.DuplicateLabelException;
 import com.emailfilter.model.FilterWrapper;
+import com.emailfilter.model.GridLabelWrapper;
 import com.emailfilter.model.LabelProperty;
 import com.emailfilter.utils.DatabaseUtils;
 
@@ -26,9 +28,10 @@ public class DatabaseTest {
 //			 saveLabelTest();
 //			 deleteLabelTest();
 //			saveLabelFilterTest();
-			updateLabel();
+//			updateLabel();
 //			updateLabelFilterTest();
 //			fetchLabelFilterDataById();
+			getLabelGridInfo();
 		} catch (Exception e) {
 			LOG.error("Exception {}", e);
 		}
@@ -99,5 +102,12 @@ public class DatabaseTest {
 		filterWrapper.setSubjectFilter(false);
 		filterWrapper.setSubjectKeywords(Arrays.asList("sub3, sub2, sub1"));
 		labelFilterService.updateLabelFilter(filterWrapper);
+	}
+	
+	public static void getLabelGridInfo() throws ClassNotFoundException, SQLException {
+		String userEmailId = "icbm.iot@gmail.com";
+		LabelDBService labelService = new LabelDBService();
+		List<GridLabelWrapper> labelGridInfo = labelService.getLabelGridInfo(userEmailId, "s");
+		LOG.debug("labelGridInfo {}", labelGridInfo);
 	}
 }

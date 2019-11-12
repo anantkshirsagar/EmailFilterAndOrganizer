@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.emailfilter.constants.AppConstants;
 import com.emailfilter.constants.CallType;
 import com.emailfilter.dbservices.LabelDBService;
+import com.emailfilter.model.GridLabelWrapper;
 import com.emailfilter.model.LabelProperty;
 import com.emailfilter.services.GmailService;
 import com.emailfilter.services.LabelService;
@@ -39,7 +40,7 @@ public class CreateLabelServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			Gson gson = AppUtils.getGsonInstance();
 			LabelService labelService = new LabelService(userEmailId, AppServletContextListener.getService());
-
+			LabelDBService labelDBService = null;
 			switch (callType) {
 			case GET_ALL_LABEL:
 				List<Label> labels = labelService.getFilteredLabel();
@@ -49,13 +50,22 @@ public class CreateLabelServlet extends HttpServlet {
 				break;
 			case CREATE_LABEL_SERVICE:
 				LabelProperty labelProperty = (LabelProperty) AppUtils.mapToClass(request, LabelProperty.class);
+				AppUtils.validateAndSetParentLabel(labelProperty);
 				LOG.debug("Params {}", labelProperty);
-				LabelDBService labelDBService = new LabelDBService();
+				labelDBService = new LabelDBService();
 				labelDBService.saveLabel(labelProperty);
 				Label labelCreated = labelService.createLabel(labelProperty.getLabel());
 				LOG.debug("Label created successfully Id: {}, Name: {}", labelCreated.getId(), labelCreated.getName());
 				AppUtils.setResponseProperties(response);
 				out.print(gson.toJson(labelProperty));
+				break;
+			case LABEL_GRID_INFO_SERVICE:
+				String searchFilter = request.getHeader("searchFilter");
+				LOG.debug("searchFilter {}", searchFilter);
+				labelDBService = new LabelDBService();
+				List<GridLabelWrapper> gridInfoList = labelDBService.getLabelGridInfo(userEmailId, searchFilter);
+				AppUtils.setResponseProperties(response);
+				out.print(gson.toJson(gridInfoList));
 				break;
 			default:
 				LOG.debug("No matching case found!");

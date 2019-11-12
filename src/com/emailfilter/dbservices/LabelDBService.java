@@ -1,8 +1,10 @@
 package com.emailfilter.dbservices;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import com.emailfilter.exceptions.DuplicateLabelException;
 import com.emailfilter.exceptions.ErrorCode;
+import com.emailfilter.model.GridLabelWrapper;
 import com.emailfilter.model.LabelProperty;
+import com.emailfilter.utils.AppUtils;
 import com.emailfilter.utils.DatabaseUtils;
 import com.google.api.services.gmail.model.Label;
 
@@ -64,6 +68,7 @@ public class LabelDBService extends AbstractDBService {
 
 	/**
 	 * TODO Update Query is not working this part is pending
+	 * 
 	 * @param labelProperty
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
@@ -91,7 +96,38 @@ public class LabelDBService extends AbstractDBService {
 		return labelId;
 	}
 
-	public void syncGmailLabelAndSave(List<Label> gmailLabelList) {
-
+	public List<GridLabelWrapper> getLabelGridInfo(String userEmailId, String labelNameSearchStr)
+			throws ClassNotFoundException, SQLException {
+		connectionSettings.build();
+		List<GridLabelWrapper> gridInfoList = new ArrayList<GridLabelWrapper>();
+		String query = null;
+		boolean flag = false;
+		if (AppUtils.isStringNotEmpty(labelNameSearchStr)) {
+			flag = true;
+			labelNameSearchStr = labelNameSearchStr.concat("%");
+			query = "select * from core_label_metadata where id in (select id from core_user_profile where user_email_id = ?) and name like ? order by creation_time desc";
+		} else {
+			query = "select * from core_label_metadata where id in (select id from core_user_profile where user_email_id = ?) order by creation_time desc";
+		}
+		PreparedStatement prepareStatement = connectionSettings.getConnection().prepareStatement(query);
+		if (flag) {
+			prepareStatement.setString(1, userEmailId);
+			prepareStatement.setString(2, labelNameSearchStr);
+		} else {
+			prepareStatement.setString(1, userEmailId);
+		}
+		LOG.debug("Query {}", prepareStatement);
+		ResultSet resultSet = prepareStatement.executeQuery();
+		int i = 1;
+		while (resultSet.next()) {
+			GridLabelWrapper gridLabelWrapper = new GridLabelWrapper();
+			gridLabelWrapper.setSrNo(i);
+			gridLabelWrapper.setLabelName(resultSet.getString("name"));
+			gridLabelWrapper.setCreationDate(resultSet.getDate("creation_time"));
+			gridInfoList.add(gridLabelWrapper);
+			++i;
+		}
+		connectionSettings.closeConnection();
+		return gridInfoList;
 	}
 }
