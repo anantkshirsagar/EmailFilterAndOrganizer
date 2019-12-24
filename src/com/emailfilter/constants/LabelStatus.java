@@ -1,0 +1,11 @@
+package com.emailfilter.constants;
+
+public enum LabelStatus {
+	BOTH_CONTAINS_DATA,
+	ONLY_GMAIL_CONTAINS_DATA,
+	ONLY_DB_CONTAINS_DATA,
+	BOTH_DOES_NOT_CONTAINS_DATA,
+	
+	DELETE_FROM_DATABASE,
+	ADD_TO_DATABASE
+}

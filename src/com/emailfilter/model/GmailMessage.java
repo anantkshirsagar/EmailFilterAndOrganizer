@@ -6,13 +6,14 @@ import java.util.List;
 import javax.mail.Address;
 
 public class GmailMessage implements Serializable {
-	
+
 	private String subject;
 	private List<Address> from;
 	private List<Address> allRecipients;
 	private List<Address> replyTo;
 	private Date sentDate;
 	private Date receivedDate;
+	private String body;
 
 	public String getSubject() {
 		return subject;
@@ -62,6 +63,14 @@ public class GmailMessage implements Serializable {
 		this.receivedDate = receivedDate;
 	}
 
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -77,6 +86,8 @@ public class GmailMessage implements Serializable {
 		builder.append(sentDate);
 		builder.append(", receivedDate=");
 		builder.append(receivedDate);
+		builder.append(", body=");
+		builder.append(body);
 		builder.append("]");
 		return builder.toString();
 	}

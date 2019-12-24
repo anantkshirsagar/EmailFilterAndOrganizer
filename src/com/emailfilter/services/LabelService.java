@@ -14,6 +14,8 @@ import com.google.api.services.gmail.Gmail.Users.Labels;
 import com.google.api.services.gmail.Gmail.Users.Labels.Create;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.ListLabelsResponse;
+import com.google.api.services.gmail.model.ListMessagesResponse;
+import com.google.api.services.gmail.model.Message;
 
 public class LabelService {
 

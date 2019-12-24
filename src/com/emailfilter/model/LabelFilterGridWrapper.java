@@ -1,19 +1,19 @@
 package com.emailfilter.model;
 
-import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-public class FilterWrapper implements Serializable {
-
+public class LabelFilterGridWrapper {
 	private int id;
 	private String label;
 	private String filterName;
+	private Date creationDate;
 	private boolean isEmailFilter;
-	private List<String> emailIds;
+	private String emailIds;
 	private boolean isSubjectFilter;
-	private List<String> subjectKeywords;
+	private String subjectKeywords;
 	private boolean isBodyFilter;
-	private List<String> bodyKeywords;
+	private String bodyKeywords;
 
 	public int getId() {
 		return id;
@@ -39,6 +39,14 @@ public class FilterWrapper implements Serializable {
 		this.filterName = filterName;
 	}
 
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
 	public boolean isEmailFilter() {
 		return isEmailFilter;
 	}
@@ -47,11 +55,11 @@ public class FilterWrapper implements Serializable {
 		this.isEmailFilter = isEmailFilter;
 	}
 
-	public List<String> getEmailIds() {
+	public String getEmailIds() {
 		return emailIds;
 	}
 
-	public void setEmailIds(List<String> emailIds) {
+	public void setEmailIds(String emailIds) {
 		this.emailIds = emailIds;
 	}
 
@@ -63,11 +71,11 @@ public class FilterWrapper implements Serializable {
 		this.isSubjectFilter = isSubjectFilter;
 	}
 
-	public List<String> getSubjectKeywords() {
+	public String getSubjectKeywords() {
 		return subjectKeywords;
 	}
 
-	public void setSubjectKeywords(List<String> subjectKeywords) {
+	public void setSubjectKeywords(String subjectKeywords) {
 		this.subjectKeywords = subjectKeywords;
 	}
 
@@ -79,23 +87,25 @@ public class FilterWrapper implements Serializable {
 		this.isBodyFilter = isBodyFilter;
 	}
 
-	public List<String> getBodyKeywords() {
+	public String getBodyKeywords() {
 		return bodyKeywords;
 	}
 
-	public void setBodyKeywords(List<String> bodyKeywords) {
+	public void setBodyKeywords(String bodyKeywords) {
 		this.bodyKeywords = bodyKeywords;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("FilterWrapper [id=");
+		builder.append("LabelFilterGridWrapper [id=");
 		builder.append(id);
 		builder.append(", label=");
 		builder.append(label);
 		builder.append(", filterName=");
 		builder.append(filterName);
+		builder.append(", creationDate=");
+		builder.append(creationDate);
 		builder.append(", isEmailFilter=");
 		builder.append(isEmailFilter);
 		builder.append(", emailIds=");

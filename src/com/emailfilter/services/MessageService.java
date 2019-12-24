@@ -1,6 +1,7 @@
 package com.emailfilter.services;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,7 @@ public class MessageService {
 		return new MimeMessage(session, new ByteArrayInputStream(emailBytes));
 	}
 
-	public GmailMessage getGmailMessage(MimeMessage mimeMessage) throws MessagingException {
+	public GmailMessage getGmailMessage(MimeMessage mimeMessage) throws MessagingException, IOException {
 		GmailMessage gmailMessage = new GmailMessage();
 		gmailMessage.setAllRecipients(Arrays.asList(mimeMessage.getAllRecipients()));
 		gmailMessage.setFrom(Arrays.asList(mimeMessage.getFrom()));
@@ -68,7 +70,10 @@ public class MessageService {
 		gmailMessage.setReplyTo(Arrays.asList(mimeMessage.getReplyTo()));
 		gmailMessage.setSentDate(mimeMessage.getSentDate());
 		gmailMessage.setSubject(mimeMessage.getSubject());
+		gmailMessage.setBody(new String(IOUtils.toByteArray(mimeMessage.getInputStream())));
 		LOG.debug("Gmail message {},", gmailMessage);
 		return gmailMessage;
 	}
+
+	
 }

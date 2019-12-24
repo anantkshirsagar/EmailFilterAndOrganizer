@@ -2,7 +2,9 @@ package com.emailfilter.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.emailfilter.constants.CallType;
+import com.emailfilter.constants.LabelStatus;
 import com.emailfilter.dbservices.LabelDBService;
 import com.emailfilter.model.LabelProperty;
 import com.emailfilter.services.LabelService;
@@ -36,22 +39,19 @@ public class SyncLabelServlet extends HttpServlet {
 
 			if (CallType.SYNC_LABEL_SERVICE.name().equals(callTypeStr)) {
 				LabelService labelService = new LabelService(userEmailId, AppServletContextListener.getService());
-				List<Label> filteredLabel = labelService.getFilteredLabel();
-				LOG.debug("Labels list {}", filteredLabel);
+				List<Label> gmailLabels = labelService.getFilteredLabel();
+				LabelDBService labelDBService = new LabelDBService();
+				List<LabelProperty> databaseLabels = labelDBService.getAllLabels(userEmailId);
 
-				if (AppUtils.isCollectionNotEmpty(filteredLabel)) {
-					LabelDBService labelDBService = new LabelDBService();
-					for (Label label : filteredLabel) {
-						LabelProperty labelProperty = new LabelProperty();
-						labelProperty.setLabel(label.getName());
-						labelProperty.setUserEmailId(userEmailId);
-						labelDBService.saveLabel(labelProperty);
-					}
-				}
+				LabelStatus labelStatus = AppUtils.getLabelStatus(gmailLabels, databaseLabels);
+				Map<LabelStatus, List<LabelProperty>> dataMap = AppUtils.syncDBAndGmailLabels(gmailLabels,
+						databaseLabels, userEmailId, labelStatus);
+				LOG.debug("dataMap {}", dataMap);
+				labelDBService.checkLabelStatusAndUpdateDatabase(labelStatus, dataMap);
 			}
-			AppUtils.setResponseProperties(response, 200, "Labels sync is completed!");
+			AppUtils.setResponseHeaders(response, 200, "Labels sync is completed!");
 		} catch (Exception e) {
-			AppUtils.setResponseProperties(response, 500, "No new labels are found! Sync completed.");
+			AppUtils.setResponseHeaders(response, 500, "No new labels are found! Sync completed.");
 			LOG.error("Servlet Exception {}", e);
 		}
 	}

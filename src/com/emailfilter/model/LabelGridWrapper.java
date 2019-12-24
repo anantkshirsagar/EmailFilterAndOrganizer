@@ -2,18 +2,11 @@ package com.emailfilter.model;
 
 import java.util.Date;
 
-public class GridLabelWrapper {
-	private int srNo;
+public class LabelGridWrapper {
+	private int id;
 	private String labelName;
+	private String oldLabelName;
 	private Date creationDate;
-
-	public int getSrNo() {
-		return srNo;
-	}
-
-	public void setSrNo(int srNo) {
-		this.srNo = srNo;
-	}
 
 	public String getLabelName() {
 		return labelName;
@@ -31,13 +24,31 @@ public class GridLabelWrapper {
 		this.creationDate = creationDate;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getOldLabelName() {
+		return oldLabelName;
+	}
+
+	public void setOldLabelName(String oldLabelName) {
+		this.oldLabelName = oldLabelName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("GridLabelWrapper [srNo=");
-		builder.append(srNo);
+		builder.append("GridLabelWrapper [id=");
+		builder.append(id);
 		builder.append(", labelName=");
 		builder.append(labelName);
+		builder.append(", oldLabelName=");
+		builder.append(oldLabelName);
 		builder.append(", creationDate=");
 		builder.append(creationDate);
 		builder.append("]");

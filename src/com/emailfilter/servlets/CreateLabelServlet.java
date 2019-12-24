@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.emailfilter.constants.AppConstants;
 import com.emailfilter.constants.CallType;
 import com.emailfilter.dbservices.LabelDBService;
-import com.emailfilter.model.GridLabelWrapper;
+import com.emailfilter.model.LabelGridWrapper;
 import com.emailfilter.model.LabelProperty;
 import com.emailfilter.services.GmailService;
 import com.emailfilter.services.LabelService;
@@ -32,12 +32,13 @@ public class CreateLabelServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		PrintWriter out = null;
 		try {
 			String callTypeStr = request.getHeader("callType");
 			String userEmailId = request.getHeader("userEmailId");
-			LOG.debug("params userEmailId {}, header {}", userEmailId, callTypeStr);
+			LOG.debug("Header params userEmailId {}, header {}", userEmailId, callTypeStr);
 			CallType callType = CallType.valueOf(callTypeStr);
-			PrintWriter out = response.getWriter();
+			out = response.getWriter();
 			Gson gson = AppUtils.getGsonInstance();
 			LabelService labelService = new LabelService(userEmailId, AppServletContextListener.getService());
 			LabelDBService labelDBService = null;
@@ -51,26 +52,39 @@ public class CreateLabelServlet extends HttpServlet {
 			case CREATE_LABEL_SERVICE:
 				LabelProperty labelProperty = (LabelProperty) AppUtils.mapToClass(request, LabelProperty.class);
 				AppUtils.validateAndSetParentLabel(labelProperty);
-				LOG.debug("Params {}", labelProperty);
+				LOG.debug("labelProperty {}", labelProperty);
 				labelDBService = new LabelDBService();
 				labelDBService.saveLabel(labelProperty);
 				Label labelCreated = labelService.createLabel(labelProperty.getLabel());
 				LOG.debug("Label created successfully Id: {}, Name: {}", labelCreated.getId(), labelCreated.getName());
 				AppUtils.setResponseProperties(response);
-				out.print(gson.toJson(labelProperty));
+				out.print(gson.toJson("Label [" + labelProperty.getLabel() + "] successfully created!"));
 				break;
 			case LABEL_GRID_INFO_SERVICE:
 				String searchFilter = request.getHeader("searchFilter");
 				LOG.debug("searchFilter {}", searchFilter);
 				labelDBService = new LabelDBService();
-				List<GridLabelWrapper> gridInfoList = labelDBService.getLabelGridInfo(userEmailId, searchFilter);
+				List<LabelGridWrapper> gridInfoList = labelDBService.getLabelGridInfo(userEmailId, searchFilter);
 				AppUtils.setResponseProperties(response);
 				out.print(gson.toJson(gridInfoList));
+				break;
+			case EDIT_LABEL_SERVICE:
+				String gmailLabelId = request.getHeader("gmailLabelId");
+				LabelGridWrapper gridLabelWrapper = (LabelGridWrapper) AppUtils.mapToClass(request,
+						LabelGridWrapper.class);
+				labelDBService = new LabelDBService();
+				LOG.debug("gmailLabelID {} gridLabelWrapper {}", gmailLabelId, gridLabelWrapper);
+				LabelProperty labelPropertyToEdit = labelDBService
+						.getLabelPropertyFromGridLabelWrapper(gridLabelWrapper, userEmailId);
+				labelDBService.updateLabel(labelPropertyToEdit);
+				labelService.updateLabel(gmailLabelId, gridLabelWrapper.getLabelName(), true, true);
+				out.print(gson.toJson("Label edited successfully!"));
 				break;
 			default:
 				LOG.debug("No matching case found!");
 			}
 		} catch (Exception e) {
+			out.print(e.getMessage());
 			LOG.error("Servlet Exception {}", e);
 		}
 	}

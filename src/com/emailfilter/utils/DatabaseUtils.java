@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.dbmanager.connection.setting.AbstractConnectionSettings;
 import com.dbmanager.connection.setting.ConnectionSettings;
 import com.dbmanager.property.util.PropertyReader;
+import com.emailfilter.constants.LabelStatus;
 import com.emailfilter.model.LabelProperty;
 
 public class DatabaseUtils {
@@ -40,23 +41,12 @@ public class DatabaseUtils {
 		return -1;
 	}
 
-	public static boolean isDuplicateLabel(AbstractConnectionSettings connectionSettings, LabelProperty labelProperty)
-			throws SQLException {
-		String query = "select name from core_label_metadata where name = ?";
-		PreparedStatement preparedStatement = connectionSettings.getConnection().prepareStatement(query);
-		preparedStatement.setString(1, labelProperty.getLabel());
-		LOG.debug("Query {}", preparedStatement);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		boolean isExists = resultSet.next();
-		LOG.debug("Is label [{}] already exists: {}", labelProperty.getLabel(), isExists ? "Yes" : "No");
-		return isExists;
-	}
-
-	public static int getLabelIdByLabelName(AbstractConnectionSettings connectionSettings, String labelName)
-			throws SQLException {
-		String query = "select id from core_label_metadata where name = ?";
+	public static int getLabelIdByLabelName(AbstractConnectionSettings connectionSettings, String labelName,
+			String userEmailId) throws SQLException {
+		String query = "select coreLabel.id as id from core_label_metadata coreLabel join core_user_profile coreUser on coreLabel.id = coreUser.id where coreLabel.name = ? and coreUser.user_email_id = ?";
 		PreparedStatement preparedStatement = connectionSettings.getConnection().prepareStatement(query);
 		preparedStatement.setString(1, labelName);
+		preparedStatement.setString(2, userEmailId);
 		LOG.debug("Query {}", preparedStatement);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
@@ -77,5 +67,4 @@ public class DatabaseUtils {
 		}
 		return "";
 	}
-
 }
