@@ -20,13 +20,16 @@
 							<button type="button" class="btn btn-default disabled" aria-label="Left Align">
 								Labels
 							</button>
+							<button type="button" class="btn btn-default" aria-label="Left Align" onclick="getLabelGridInfoService(null)">
+								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+							</button>
 							<button type="button" class="btn btn-default" aria-label="Left Align">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</div>
 						<input type="text" class="form-control" onchange="getLabelGridInfoService(this.value)" aria-label="..." placeholder="Search...">
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal" onclick="clearInputs()">
+							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#createModal" onclick="clearInputs()">
 								Create New Label
 							</button>
 						</div>
@@ -36,45 +39,72 @@
 			
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="table-responsive">
-						<table class="table table-striped valign" id="printTable">
-						</table>
+					<div class="table-responsive" id="printTableDiv">
+						<!-- Here table will dynamically print from create-label.js script -->
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<form>
-			<div class="modal fade" id="myModal" role="dialog">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Create Label</h4>
-						</div>
-						<div class="modal-body">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<div class="form-group">
-										<label for="sel1">Label</label>
-										<input type="text" class="form-control" aria-label="..." placeholder="Enter label name" name="labelName" id="labelName">
-									</div>
-									<div class="form-group">
-										<label for="parentLabel">Parent Label</label>
-										<select class="form-control" name="parentLabelId" id="parentLabelId">
-										</select>						
-									</div>
+		<div class="modal fade" id="createModal" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Create Label</h4>
+					</div>
+					<div class="modal-body">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="form-group">
+									<label for="sel1">Label</label>
+									<input type="text" class="form-control" aria-label="..." placeholder="Enter label name" name="labelName" id="labelName">
+								</div>
+								<div class="form-group">
+									<label for="parentLabel">Parent Label</label>
+									<select class="form-control" name="parentLabelId" id="parentLabelId">
+									</select>						
 								</div>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" onclick="createLabelService()">Save</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" onclick="createLabelService()">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
+		
+		<div class="modal fade" id="editModal" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Edit Label</h4>
+					</div>
+					<div class="modal-body">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="form-group">
+									<label for="sel1">Old Label Name</label>
+									<input type="text" class="form-control" aria-label="..." placeholder="Enter label name" name="oldLabelName" id="oldLabelName" disabled>
+								</div>
+								<div class="form-group">
+									<label for="sel1">New Label Name</label>
+									<input type="text" class="form-control" aria-label="..." placeholder="Enter label name" name="editLabelName" id="editLabelName">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" onclick="editLabelService()">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		
 		<!-- Following jquery script must be load in each .html page -->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>

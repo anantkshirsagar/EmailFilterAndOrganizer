@@ -40,6 +40,7 @@
 			if (this.readyState == 4 && this.status == 200) {
 				var message = xhttp.getResponseHeader("message");
 				alert(message);
+				getLabelGridInfoService(null);
 			} else if(this.status == 500){
 				var message = xhttp.getResponseHeader("message");
 				alert(message);

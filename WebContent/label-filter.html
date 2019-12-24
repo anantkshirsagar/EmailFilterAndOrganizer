@@ -24,9 +24,9 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</div>
-						<input type="text" class="form-control" aria-label="..." placeholder="Search...">
+						<input type="text" class="form-control" onchange="getLabelFilterGridInfoService(this.value)" aria-label="..." placeholder="Search...">
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#myModal">
+							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#labelFilterModal">
 								Create New Filter
 							</button>
 						</div>
@@ -36,57 +36,13 @@
 			
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="table-responsive">
-						<table class="table table-striped valign">
-							<thead>
-								<tr>
-									<th>Sr No.</th>
-									<th>Label Name</th>
-									<th>Creation Date</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td style="vertical-align: middle;">1</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Run
-										</button>
-									</td>
-								</tr>
-								<tr>
-									<td style="vertical-align: middle;">2</td>
-									<td style="vertical-align: middle;">Important Emails</td>
-									<td style="vertical-align: middle;">08-October-2019 10:22:22</td>
-									<td>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Edit
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Delete
-										</button>
-										<button type="button" class="btn btn-default btn-danger" aria-label="Left Align">
-											Run
-										</button>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
+					<div class="table-responsive" id="printTableDiv">
+						<!-- Here table will dynamically print from label-filter.js script -->
 					</div>
 				</div>
 			</div>
 			
-			<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal fade" id="labelFilterModal" role="dialog">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -99,11 +55,19 @@
 									<div class="form-group">
 										<label for="labelName">Select Label</label>
 										<select class="form-control" id="labelName" name="labelName">
-											<option>Label-1</option>
-											<option>Label-2</option>
-											<option>Label-3</option>
-											<option>Label-4</option>
 										</select>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Filter Name</label>
+										<div class="input-group">
+											<input type="text" class="form-control" aria-label="..." name="filterName" id="filterName" placeholder="Enter filter name">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please filter name for uniquely filter identification....">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
 									</div>
 									
 									<div class="form-group">
