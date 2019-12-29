@@ -19,7 +19,14 @@ function getLabelGridInfoService(searchFilter){
 		if (this.readyState == 4 && this.status == 200) {
 			var labelGridInfo = JSON.parse(xhttp.responseText);
 			console.log(labelGridInfo);
-			createTable(labelGridInfo);
+			if(Array.isArray(labelGridInfo) && labelGridInfo.length){
+				document.getElementById("showDataTableDiv").style.display = "block";
+				document.getElementById("noRecordsFoundDiv").style.display = "none";
+				createTable(labelGridInfo);
+			} else {
+				document.getElementById("showDataTableDiv").style.display = "none";
+				document.getElementById("noRecordsFoundDiv").style.display = "block";
+			}
 		}
 	};
 	

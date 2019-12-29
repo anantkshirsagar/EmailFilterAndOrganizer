@@ -34,15 +34,7 @@ function getAllLabel(){
 		if (this.readyState == 4 && this.status == 200) {
 			labelsArray = JSON.parse(xhttp.responseText);
 			var selectTag = document.getElementById("labelName");
-			clearAllOptions(selectTag);
-			var optionTag = document.createElement("option");
-			optionTag.text = "";
-			selectTag.options.add(optionTag, 0);
-			for(var i = 0; i < labelsArray.length; ++i){
-				optionTag = document.createElement("option");
-				optionTag.text = labelsArray[i].name;
-				selectTag.options.add(optionTag, i+1);
-			}			
+			fillLabelsSelectTag(selectTag);
 		}
 	};
 	
@@ -50,6 +42,18 @@ function getAllLabel(){
 	xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
 	xhttp.setRequestHeader("callType", "GET_ALL_LABEL");
 	xhttp.send();
+}
+
+function fillLabelsSelectTag(selectTagObject){
+	clearAllOptions(selectTagObject);
+	var optionTag = document.createElement("option");
+	optionTag.text = "";
+	selectTagObject.options.add(optionTag, 0);
+	for(var i = 0; i < labelsArray.length; ++i){
+		optionTag = document.createElement("option");
+		optionTag.text = labelsArray[i].name;
+		selectTagObject.options.add(optionTag, i+1);
+	}
 }
 
 function labelFilterService() {
@@ -64,7 +68,7 @@ function labelFilterService() {
 	var isBodyFilter = getCheckboxValue("isBodyFilter");
 	var bodyKeywords = splitIntoArray(getValue("bodyKeywords"));
 	
-	var deleteFilterJson = {
+	var filterJson = {
 		label : label,
 		isEmailFilter : isEmailFilter,
 		filterName : filterName,
@@ -84,7 +88,7 @@ function labelFilterService() {
 	xhttp.open("POST", "LabelFilterServlet", true);
 	xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
 	xhttp.setRequestHeader("callType", "SAVE_LABEL_FILTER");
-	xhttp.send(JSON.stringify(deleteFilterJson));
+	xhttp.send(JSON.stringify(filterJson));
 }
 
 function getLabelFilterGridInfoService(searchFilter){
@@ -94,7 +98,14 @@ function getLabelFilterGridInfoService(searchFilter){
 		if (this.readyState == 4 && this.status == 200) {
 			var labelGridInfo = JSON.parse(xhttp.responseText);
 			console.log(labelGridInfo);
-			createTable(labelGridInfo);
+			if(Array.isArray(labelGridInfo) && labelGridInfo.length){
+				document.getElementById("showDataTableDiv").style.display = "block";
+				document.getElementById("noRecordsFoundDiv").style.display = "none";
+				createTable(labelGridInfo);
+			} else {
+				document.getElementById("showDataTableDiv").style.display = "none";
+				document.getElementById("noRecordsFoundDiv").style.display = "block";
+			}
 		}
 	};
 	
@@ -159,9 +170,10 @@ function addRow(gridInfo) {
 		var creationDateCell = document.createTextNode(gridInfo[record].creationDate);
 		creationDateTD.appendChild(creationDateCell);
 		
+		var name = gridInfo[record].id + "$" +gridInfo[record].filterName + "$" +gridInfo[record].label + "$" +gridInfo[record].creationDate + "$" + gridInfo[record].isEmailFilter + "$" + gridInfo[record].emailIds + "$" + gridInfo[record].isSubjectFilter + "$" + gridInfo[record].subjectKeywords+ "$" + gridInfo[record].isBodyFilter+ "$" + gridInfo[record].bodyKeywords;
+
 		var editButtonTD = document.createElement('td');
 		editButtonTD = tr.insertCell(4);
-		var name = gridInfo[record].id + "$" +gridInfo[record].labelName + "$" +gridInfo[record].creationDate;
 		var editButton = document.createElement('input');
 		editButton.setAttribute('type', 'button');
 		editButton.setAttribute('value', 'Edit');
@@ -199,4 +211,79 @@ function splitIntoArray(string){
 
 function closeDialog(dialogName){
 	$('#'+dialogName).modal('hide');
+}
+
+/*Edit label filter*/
+
+var labelFilterJson = {};
+
+function edit(selectedFilterData){
+	labelFilterJson = getLabelJson(selectedFilterData);
+	document.getElementById("editFilterName").value = labelFilterJson.editFilterName;
+	var selectTagObject = document.getElementById("editLabelName");
+	fillLabelsSelectTag(selectTagObject);
+	setDefaultValueToLabelDropDown(labelFilterJson.editLabelName);
+	document.getElementById("editIsEmailFilter").checked = labelFilterJson.editIsEmailFilter == 'true' ? true : false;
+	document.getElementById("editEmailIds").value = labelFilterJson.editEmailIds == 'undefined' ? '' : labelFilterJson.editEmailIds;
+	document.getElementById("editIsSubjectFilter").checked = labelFilterJson.editIsSubjectFilter == 'true' ? true : false;
+	document.getElementById("editSubjectKeywords").value = labelFilterJson.editSubjectKeywords == 'undefined' ? '' : labelFilterJson.editSubjectKeywords;
+	document.getElementById("editIsBodyFilter").checked = labelFilterJson.editIsBodyFilter == 'true' ? true : false;
+	document.getElementById("editBodyKeywords").value = labelFilterJson.editBodyKeywords == 'undefined' ? '' : labelFilterJson.editBodyKeywords;
+	
+	openDialog("editLabelFilterModal");
+}
+
+function setDefaultValueToLabelDropDown(value){
+    $("#editLabelName").val(value);
+}
+
+function getLabelJson(selectLabelData){
+	var delimeter = "$";
+	var split = selectLabelData.split(delimeter);
+	return {
+		id : split[0],
+		editFilterName : split[1],
+		editLabelName : split[2],
+		creationDate : new Date(split[3]),
+		editIsEmailFilter : split[4],
+		editEmailIds : split[5],
+		editIsSubjectFilter : split[6],
+		editSubjectKeywords : split[7],
+		editIsBodyFilter : split[8],
+		editBodyKeywords : split[9]
+	};
+}
+
+function openDialog(dialogName){
+	$('#'+dialogName).modal('show');
+}
+
+function editLabelFilterService(){
+	var editedLabelFilterData = getEditedLabelFilter(labelFilterJson.id);
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			closeDialog("editLabelFilterModal");
+			getLabelFilterGridInfoService(null)
+		}
+	};
+	
+	xhttp.open("POST", "LabelFilterServlet", true);
+	xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
+	xhttp.setRequestHeader("callType", "EDIT_LABEL_FILTER");
+	xhttp.send(JSON.stringify(editedLabelFilterData));
+}
+
+function getEditedLabelFilter(filterId){
+	return {
+		id : filterId,
+		label : getValue("editLabelName"),
+		filterName : getValue("editFilterName"),
+		isEmailFilter : getCheckboxValue("editIsEmailFilter"),
+		emailIds : splitIntoArray(getValue("editEmailIds")),
+		isSubjectFilter : getCheckboxValue("editIsSubjectFilter"),
+		subjectKeywords : splitIntoArray(getValue("editSubjectKeywords")),
+		isBodyFilter : getCheckboxValue("editIsBodyFilter"),
+		bodyKeywords : splitIntoArray(getValue("editBodyKeywords"))
+	};
 }

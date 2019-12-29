@@ -27,7 +27,7 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</div>
-						<input type="text" class="form-control" onchange="getLabelGridInfoService(this.value)" aria-label="..." placeholder="Search...">
+						<input type="text" class="form-control" onchange="getLabelGridInfoService(this.value)" aria-label="..." placeholder="Search by label name...">
 						<div class="input-group-btn">
 							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#createModal" onclick="clearInputs()">
 								Create New Label
@@ -37,10 +37,16 @@
 				</div>
 			</div>
 			
-			<div class="panel panel-default">
+			<div class="panel panel-default" id="noRecordsFoundDiv">
+				<div class="panel-body">
+					No records found!
+				</div>
+			</div>
+			
+			<div class="panel panel-default" id="showDataTableDiv" style="display: none;">
 				<div class="panel-body">
 					<div class="table-responsive" id="printTableDiv">
-						<!-- Here table will dynamically print from create-label.js script -->
+						<!-- Here table will dynamically print from label-filter.js script -->
 					</div>
 				</div>
 			</div>

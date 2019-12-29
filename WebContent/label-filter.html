@@ -24,7 +24,7 @@
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</div>
-						<input type="text" class="form-control" onchange="getLabelFilterGridInfoService(this.value)" aria-label="..." placeholder="Search...">
+						<input type="text" class="form-control" onchange="getLabelFilterGridInfoService(this.value)" aria-label="..." placeholder="Search by filter name...">
 						<div class="input-group-btn">
 							<button type="button" class="btn btn-default btn-danger" aria-label="Left Align" data-toggle="modal" data-target="#labelFilterModal">
 								Create New Filter
@@ -34,7 +34,13 @@
 				</div>
 			</div>
 			
-			<div class="panel panel-default">
+			<div class="panel panel-default" id="noRecordsFoundDiv">
+				<div class="panel-body">
+					No records found!
+				</div>
+			</div>
+			
+			<div class="panel panel-default" id="showDataTableDiv" style="display: none;">
 				<div class="panel-body">
 					<div class="table-responsive" id="printTableDiv">
 						<!-- Here table will dynamically print from label-filter.js script -->
@@ -125,6 +131,96 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-danger" onclick="labelFilterService()">Save</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Edit dialog -->
+			<div class="modal fade" id="editLabelFilterModal" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Create New Filter</h4>
+						</div>
+						<div class="modal-body">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="labelName">Select Label</label>
+										<select class="form-control" id="editLabelName" name="editLabelName">
+										</select>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Filter Name</label>
+										<div class="input-group">
+											<input type="text" class="form-control" aria-label="..." name="editFilterName" id="editFilterName" placeholder="Enter filter name">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please filter name for uniquely filter identification....">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Email Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="editIsEmailFilter" name="editIsEmailFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="editEmailIds" id="editEmailIds" placeholder="Enter comma (,) separated email id's">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated email id's (For ex: abcd@example.com, pqrs@example.com)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+			
+									<div class="form-group">
+										<label for="emailFilter">Subject Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="editIsSubjectFilter" name="editIsSubjectFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="editSubjectKeywords" id="editSubjectKeywords" placeholder="Enter comma (,) separated keywords">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated keywords which will occur in subject (For ex: keyword1, keyword2)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label for="emailFilter">Body Filter <em>(Tick check box to add filter)</em></label>
+										<div class="input-group">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align">
+													<input type="checkbox" id="editIsBodyFilter" name="editIsBodyFilter" aria-label="...">
+												</button>
+											</div>
+											<input type="text" class="form-control" aria-label="..." name="editBodyKeywords" id="editBodyKeywords" placeholder="Enter comma (,) separated keywords">
+											<div class="input-group-btn">
+												<button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Please add comma separated keywords which will occur in body (For ex: keyword1, keyword2)">
+													<strong>? (Help)</strong>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" onclick="editLabelFilterService()">Save</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 					</div>
