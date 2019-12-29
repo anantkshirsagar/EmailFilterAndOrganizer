@@ -20,10 +20,11 @@ import com.emailfilter.model.GmailMessage;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.ModifyMessageRequest;
 
 public class MessageService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(LabelService.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(MessageService.class);
 	private final String userEmailId;
 	private final Gmail gmailService;
 
@@ -62,6 +63,25 @@ public class MessageService {
 		return new MimeMessage(session, new ByteArrayInputStream(emailBytes));
 	}
 
+	/**
+	 * Move message (mail) from one label to another label <br>
+	 * labelToAdd: This list contains label ids where we want to move the mail. <br>
+	 * labelsToRemove: This list contains label ids where we want to remove the
+	 * mail.
+	 * 
+	 * @param messageId
+	 * @param labelsToAdd
+	 * @param labelsToRemove
+	 * @throws IOException
+	 */
+	public void moveMessageFromLabel(String messageId, List<String> labelsToAdd, List<String> labelsToRemove)
+			throws IOException {
+		LOG.debug("Message id: {}", messageId);
+		ModifyMessageRequest modifyMessageRequest = new ModifyMessageRequest().setAddLabelIds(labelsToAdd)
+				.setRemoveLabelIds(labelsToRemove);
+		gmailService.users().messages().modify(userEmailId, messageId, modifyMessageRequest).execute();
+	}
+
 	public GmailMessage getGmailMessage(MimeMessage mimeMessage) throws MessagingException, IOException {
 		GmailMessage gmailMessage = new GmailMessage();
 		gmailMessage.setAllRecipients(Arrays.asList(mimeMessage.getAllRecipients()));
@@ -71,9 +91,7 @@ public class MessageService {
 		gmailMessage.setSentDate(mimeMessage.getSentDate());
 		gmailMessage.setSubject(mimeMessage.getSubject());
 		gmailMessage.setBody(new String(IOUtils.toByteArray(mimeMessage.getInputStream())));
-		LOG.debug("Gmail message {},", gmailMessage);
 		return gmailMessage;
 	}
 
-	
 }

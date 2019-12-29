@@ -1,7 +1,6 @@
 package com.emailfilter.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class LabelFilterGridWrapper {
 	private int id;

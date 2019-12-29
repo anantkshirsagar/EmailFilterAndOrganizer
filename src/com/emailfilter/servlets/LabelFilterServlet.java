@@ -50,6 +50,11 @@ public class LabelFilterServlet extends HttpServlet {
 						filterNameSearchStr);
 				out.print(gson.toJson(labelFilterGridInfo));
 				break;
+			case EDIT_LABEL_FILTER:
+				FilterWrapper editLabelFilterWrapper = (FilterWrapper) AppUtils.mapToClass(request, FilterWrapper.class);
+				LOG.info("editLabelFilterWrapper: {}", editLabelFilterWrapper);
+				filterDBService.updateLabelFilter(editLabelFilterWrapper, userEmailId);
+				break;
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			LOG.error("Filter Exception: {}", e);
