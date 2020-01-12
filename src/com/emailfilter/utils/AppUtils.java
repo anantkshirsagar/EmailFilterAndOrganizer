@@ -1,5 +1,6 @@
 package com.emailfilter.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,16 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dbmanager.objectify.Objectify;
+import com.emailfilter.constants.AppConstants;
 import com.emailfilter.constants.FilterLabels;
 import com.emailfilter.constants.LabelStatus;
-import com.emailfilter.model.LabelGridWrapper;
 import com.emailfilter.model.LabelProperty;
 import com.google.api.services.gmail.model.Label;
 import com.google.gson.Gson;
@@ -234,5 +239,40 @@ public class AppUtils {
 			return stringBuilder.deleteCharAt(stringBuilder.toString().length() - 1).toString();
 		}
 		return null;
+	}
+
+	public static Label matchLabelNameAndGetGmailLabel(String labelName, List<Label> gmailLabels) {
+		if (CollectionUtils.isNotEmpty(gmailLabels)) {
+			for (Label label : gmailLabels) {
+				if (labelName.equals(label.getName())) {
+					return label;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static List<Address> convertStringToAddress(List<String> emailIds) {
+		List<Address> addresses = new ArrayList<Address>();
+		for (String email : emailIds) {
+			InternetAddress internetAddress = new InternetAddress();
+			internetAddress.setAddress(email.trim());
+			addresses.add(internetAddress);
+		}
+		return addresses;
+	}
+
+	public static String getHomeDirectory() {
+		String userHomeDir = System.getProperty(AppConstants.USER_HOME);
+		LOG.debug("User home directory {}", userHomeDir);
+		String appFolderPath = userHomeDir + File.separator + AppConstants.APP_FOLDER_NAME;
+		LOG.debug("App folder path {}", appFolderPath);
+		File file = new File(appFolderPath);
+		if (!file.exists()) {
+			file.mkdir();
+		} else {
+			LOG.debug("Deleted [{}] directory: {}", appFolderPath, FileUtils.deleteQuietly(file));
+		}
+		return appFolderPath;
 	}
 }

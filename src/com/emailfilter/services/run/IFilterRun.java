@@ -2,9 +2,9 @@ package com.emailfilter.services.run;
 
 import com.emailfilter.model.FilterWrapper;
 
-public interface IFilterRun {
+public interface IFilterRun extends Runnable {
 
-	void run(FilterWrapper filterWrapper, String userEmailId) throws Exception;
+	void execute() throws Exception;
 
 	void bodyFilter(FilterWrapper filterWrapper, String userEmailId) throws Exception;
 

@@ -94,4 +94,8 @@ public class MessageService {
 		return gmailMessage;
 	}
 
+	public void trashMessage(String messageId) throws IOException {
+		gmailService.users().messages().trash(userEmailId, messageId).execute();
+		LOG.debug("Message with id: {} has been trashed.", messageId);
+	}
 }

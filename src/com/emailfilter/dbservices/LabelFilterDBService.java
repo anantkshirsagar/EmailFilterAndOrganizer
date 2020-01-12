@@ -194,4 +194,61 @@ public class LabelFilterDBService extends AbstractDBService {
 		LOG.debug("updateLabelFilter {}", prepareStatement.executeUpdate());
 		connectionSettings.closeConnection();
 	}
+
+	public FilterWrapper getLabelFilterByFilterName(String filterName, String userEmailId)
+			throws SQLException, ClassNotFoundException, IOException {
+		connectionSettings.build();
+		String query = "select labelFilter.id, labelFilter.filter_name, labelFilter.label_id, "
+				+ "labelFilter.is_email_id_filter, labelFilter.email_id_keywords, "
+				+ "labelFilter.is_subject_filter, labelFilter.subject_keywords, labelFilter.is_body_filter, "
+				+ "labelFilter.body_keywords, labelFilter.creation_date from label_filter labelFilter "
+				+ "join core_label_metadata label on label.id = labelFilter.label_id "
+				+ "join core_user_profile userProfile on userProfile.label_id = label.id "
+				+ "where userProfile.user_email_id = ? and labelFilter.filter_name = ?";
+		PreparedStatement prepareStatement = connectionSettings.getConnection().prepareStatement(query);
+		prepareStatement.setString(1, userEmailId);
+		prepareStatement.setString(2, filterName);
+		LOG.debug("Query {}", prepareStatement);
+		ResultSet resultSet = prepareStatement.executeQuery();
+		FilterWrapper filterWrapper = new FilterWrapper();
+		if (resultSet.next()) {
+			filterWrapper.setId(resultSet.getInt("id"));
+			filterWrapper.setEmailFilter(resultSet.getBoolean("is_email_id_filter"));
+
+			InputStream emailStream = resultSet.getBinaryStream("email_id_keywords");
+			filterWrapper.setEmailIds(
+					emailStream != null ? (List<String>) Objectify.deserialize(IOUtils.toByteArray(emailStream))
+							: null);
+
+			InputStream subjectStream = resultSet.getBinaryStream("subject_keywords");
+			filterWrapper.setSubjectKeywords(
+					subjectStream != null ? (List<String>) Objectify.deserialize(IOUtils.toByteArray(subjectStream))
+							: null);
+
+			InputStream bodyStream = resultSet.getBinaryStream("body_keywords");
+			filterWrapper.setBodyKeywords(
+					bodyStream != null ? (List<String>) Objectify.deserialize(IOUtils.toByteArray(bodyStream)) : null);
+
+			filterWrapper.setEmailFilter(resultSet.getBoolean("is_email_id_filter"));
+			filterWrapper.setSubjectFilter(resultSet.getBoolean("is_subject_filter"));
+			filterWrapper.setFilterName(resultSet.getString("filter_name"));
+			filterWrapper.setBodyFilter(resultSet.getBoolean("is_body_filter"));
+			int labelId = resultSet.getInt("label_id");
+			filterWrapper.setLabel(DatabaseUtils.getLabelNameByLabelId(connectionSettings, labelId));
+		}
+		LOG.debug("filterWrapper {}", filterWrapper);
+		connectionSettings.closeConnection();
+		return filterWrapper;
+	}
+
+	public void deleteFilter(int filterId) throws SQLException, ClassNotFoundException {
+		connectionSettings.build();
+		String query = "delete from label_filter where id = ?";
+
+		PreparedStatement prepareStatement = connectionSettings.getConnection().prepareStatement(query);
+		prepareStatement.setInt(1, filterId);
+		LOG.debug("Query {}", prepareStatement);
+		LOG.debug("deleteFilter {}", prepareStatement.executeUpdate());
+		connectionSettings.closeConnection();
+	}
 }

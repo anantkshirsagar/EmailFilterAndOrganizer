@@ -7,6 +7,8 @@ import javax.mail.Address;
 
 public class GmailMessage implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String subject;
 	private List<Address> from;
 	private List<Address> allRecipients;

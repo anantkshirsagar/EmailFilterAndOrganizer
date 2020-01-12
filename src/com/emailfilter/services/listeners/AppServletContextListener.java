@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.emailfilter.services.GmailService;
+import com.emailfilter.utils.AppUtils;
 import com.google.api.services.gmail.Gmail;
 
 public class AppServletContextListener implements ServletContextListener {
@@ -16,12 +17,14 @@ public class AppServletContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
+		LOG.debug("Context destroyed...");
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		GmailService gmailService = new GmailService();
 		try {
+			System.setProperty("user.dir", AppUtils.getHomeDirectory());
 			setService(gmailService.getGmailService());
 		} catch (Exception e) {
 			LOG.error("Service exception {}", e);

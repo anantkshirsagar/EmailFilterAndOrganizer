@@ -3,6 +3,7 @@ package com.emailfilter.model;
 import java.util.Date;
 
 public class LabelFilterGridWrapper {
+	
 	private int id;
 	private String label;
 	private String filterName;

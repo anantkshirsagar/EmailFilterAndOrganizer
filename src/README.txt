@@ -1,1 +1,0 @@
-This is src folder contains all of the java packages and java files.

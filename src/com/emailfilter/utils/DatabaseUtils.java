@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.dbmanager.connection.setting.AbstractConnectionSettings;
 import com.dbmanager.connection.setting.ConnectionSettings;
 import com.dbmanager.property.util.PropertyReader;
-import com.emailfilter.constants.LabelStatus;
-import com.emailfilter.model.LabelProperty;
 
 public class DatabaseUtils {
 
@@ -66,5 +64,9 @@ public class DatabaseUtils {
 			return resultSet.getString("name");
 		}
 		return "";
+	}
+			
+	public static void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.close();
 	}
 }

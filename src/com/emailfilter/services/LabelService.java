@@ -14,8 +14,6 @@ import com.google.api.services.gmail.Gmail.Users.Labels;
 import com.google.api.services.gmail.Gmail.Users.Labels.Create;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.ListLabelsResponse;
-import com.google.api.services.gmail.model.ListMessagesResponse;
-import com.google.api.services.gmail.model.Message;
 
 public class LabelService {
 
@@ -29,6 +27,7 @@ public class LabelService {
 	}
 
 	public java.util.List<Label> getAllLabels() throws Exception {
+		LOG.debug("USER EMAIL ID {}", userEmailId);
 		ListLabelsResponse listResponse = gmailService.users().labels().list(userEmailId).execute();
 		return listResponse.getLabels();
 	}
@@ -46,7 +45,17 @@ public class LabelService {
 	public Label getLabelByLabelId(String labelId) throws Exception {
 		List<Label> labelList = getFilteredLabel();
 		for (Label label : labelList) {
-			if (labelId.equals(label.getId())) {
+			if (labelId.trim().equals(label.getId())) {
+				return label;
+			}
+		}
+		return null;
+	}
+
+	public Label getLabelByLabelName(String labelName) throws Exception {
+		List<Label> labelList = getFilteredLabel();
+		for (Label label : labelList) {
+			if (labelName.trim().equals(label.getName())) {
 				return label;
 			}
 		}

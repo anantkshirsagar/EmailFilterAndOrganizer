@@ -5,6 +5,8 @@ import java.util.List;
 
 public class FilterWrapper implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private int id;
 	private String label;
 	private String filterName;

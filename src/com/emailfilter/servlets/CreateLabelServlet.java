@@ -12,12 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.emailfilter.constants.AppConstants;
 import com.emailfilter.constants.CallType;
 import com.emailfilter.dbservices.LabelDBService;
 import com.emailfilter.model.LabelGridWrapper;
 import com.emailfilter.model.LabelProperty;
-import com.emailfilter.services.GmailService;
 import com.emailfilter.services.LabelService;
 import com.emailfilter.services.listeners.AppServletContextListener;
 import com.emailfilter.utils.AppUtils;
@@ -36,7 +34,7 @@ public class CreateLabelServlet extends HttpServlet {
 		try {
 			String callTypeStr = request.getHeader("callType");
 			String userEmailId = request.getHeader("userEmailId");
-			LOG.debug("Header params userEmailId {}, header {}", userEmailId, callTypeStr);
+			LOG.debug("Header params userEmailId {}, callType {}", userEmailId, callTypeStr);
 			CallType callType = CallType.valueOf(callTypeStr);
 			out = response.getWriter();
 			Gson gson = AppUtils.getGsonInstance();

@@ -56,11 +56,15 @@ public class DeleteFilterServlet extends HttpServlet {
 				LOG.info("editDeleteFilterWrapper: {}", editDeleteFilterWrapper);
 				filterDBService.updateDeleteFilter(editDeleteFilterWrapper, userEmailId);
 				break;
+			case DELETE_FILTER_SERVICE:
+				String filterId = request.getHeader("filterId");
+				LOG.debug("filterId {}", filterId);
+				filterDBService.deleteFilter(Integer.parseInt(filterId));
+				break;
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			LOG.error("Filter Exception: {}", e);
 			out.print("Error while saving filter " + e);
-			return;
 		}
 	}
 }
