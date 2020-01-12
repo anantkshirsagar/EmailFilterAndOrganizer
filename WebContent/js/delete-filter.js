@@ -97,7 +97,6 @@ function getLabelFilterGridInfoService(searchFilter){
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var labelGridInfo = JSON.parse(xhttp.responseText);
-			console.log(labelGridInfo);
 			if(Array.isArray(labelGridInfo) && labelGridInfo.length){
 				document.getElementById("showDataTableDiv").style.display = "block";
 				document.getElementById("noRecordsFoundDiv").style.display = "none";
@@ -187,7 +186,8 @@ function addRow(gridInfo) {
 		var deleteButton = document.createElement('input');
 		deleteButton.setAttribute('type', 'button');
 		deleteButton.setAttribute('value', 'Delete');
-		deleteButton.setAttribute('onclick', 'edit(this)');
+		deleteButton.setAttribute('name', name);
+		deleteButton.setAttribute('onclick', 'deleteFilter(this.name)');
 		deleteButton.setAttribute('class', 'btn btn-default btn-danger');
 		deleteButtonTD.appendChild(deleteButton);	
 		
@@ -196,11 +196,48 @@ function addRow(gridInfo) {
 		var runButton = document.createElement('input');
 		runButton.setAttribute('type', 'button');
 		runButton.setAttribute('value', 'Run');
-		runButton.setAttribute('onclick', 'edit(this)');
+		runButton.setAttribute('name', name);
+		runButton.setAttribute('onclick', 'run(this.name)');
 		runButton.setAttribute('class', 'btn btn-default btn-danger');
 		runButtonTD.appendChild(runButton);	
 	}
 }
+
+function deleteFilter(selectedFilterData){
+	labelFilterJson = getLabelJson(selectedFilterData);
+	var filterId = labelFilterJson.id;
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			getLabelFilterGridInfoService(null);
+			console.log("Filter removed successfully...");
+		}
+	};
+	
+	xhttp.open("POST", "DeleteFilterServlet", true);
+	xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
+	xhttp.setRequestHeader("callType", "DELETE_FILTER_SERVICE");
+	xhttp.setRequestHeader("filterId", filterId);
+	xhttp.send();
+}
+
+function run(selectedFilterData){
+	labelFilterJson = getLabelJson(selectedFilterData);
+	var filterData = getFilterWrapperObjectFromLabelFilter(labelFilterJson);
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log("Creating delete run...");
+		}
+	};
+	
+	xhttp.open("POST", "RunServlet", true);
+	xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
+	xhttp.setRequestHeader("callType", "DELETE_RUN_SERVICE");
+	xhttp.send(JSON.stringify(filterData));
+}
+
 
 function splitIntoArray(string){
 	if(string){
@@ -285,5 +322,20 @@ function getEditedLabelFilter(filterId){
 		subjectKeywords : splitIntoArray(getValue("editSubjectKeywords")),
 		isBodyFilter : getCheckboxValue("editIsBodyFilter"),
 		bodyKeywords : splitIntoArray(getValue("editBodyKeywords"))
+	};
+}
+
+
+function getFilterWrapperObjectFromLabelFilter(labelFilter){
+	return {
+		id : labelFilter.id,
+		label : labelFilter.editLabelName,
+		filterName : labelFilter.editFilterName,
+		isEmailFilter : labelFilter.editIsEmailFilter,
+		emailIds : splitIntoArray(labelFilter.editEmailIds),
+		isSubjectFilter : labelFilter.editIsSubjectFilter,
+		subjectKeywords : splitIntoArray(labelFilter.editSubjectKeywords),
+		isBodyFilter : labelFilter.editIsBodyFilter,
+		bodyKeywords : splitIntoArray(labelFilter.editBodyKeywords)
 	};
 }

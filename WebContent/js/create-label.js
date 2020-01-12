@@ -10,7 +10,7 @@ function onPageLoad() {
 //Global variable which are used across the multiple functions
 var parentLabelsArray = [];
 var header = new Array();
-header = ['Sr.No', 'Label Name', 'Creation Date', 'Edit', 'Remove'];
+header = ['Sr.No', 'Label Name', 'Creation Date', 'Edit'];
 
 function getLabelGridInfoService(searchFilter){
 	var xhttp = new XMLHttpRequest();
@@ -96,14 +96,14 @@ function addRow(gridInfo) {
 		editButton.setAttribute('class', 'btn btn-default btn-danger');
 		editButtonTD.appendChild(editButton);
 		
-		var deleteButtonTD = document.createElement('td');
-		deleteButtonTD = tr.insertCell(4);
-		var deleteButton = document.createElement('input');
-		deleteButton.setAttribute('type', 'button');
-		deleteButton.setAttribute('value', 'Delete');
-		deleteButton.setAttribute('onclick', 'edit(this)');
-		deleteButton.setAttribute('class', 'btn btn-default btn-danger');
-		deleteButtonTD.appendChild(deleteButton);	
+//		var deleteButtonTD = document.createElement('td');
+//		deleteButtonTD = tr.insertCell(4);
+//		var deleteButton = document.createElement('input');
+//		deleteButton.setAttribute('type', 'button');
+//		deleteButton.setAttribute('value', 'Delete');
+//		deleteButton.setAttribute('onclick', 'edit(this)');
+//		deleteButton.setAttribute('class', 'btn btn-default btn-danger');
+//		deleteButtonTD.appendChild(deleteButton);	
 	}
 }
 

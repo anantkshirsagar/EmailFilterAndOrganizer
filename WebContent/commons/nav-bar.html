@@ -14,14 +14,20 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#"> <span>
-							<button type="button" class="btn btn-default"
-								aria-label="Left Align" onclick="syncLabelService()">
-								Sync Labels</button>
-					</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-user"
-						aria-hidden="true"></span>&nbsp;&nbsp;<span id="currentUsername"></span>&nbsp;&nbsp;<span
-						class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-				</a></li>
+				<li>
+					<a href="#">
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;
+						<span id="currentUsername"></span>&nbsp;&nbsp;
+							 
+						<span>
+							<button type="button" class="btn btn-default" aria-label="Left Align" onclick="syncLabelService()"> Sync Labels</button>
+						</span>&nbsp;&nbsp;
+						
+						<span>
+							<button type="button" class="btn btn-default" aria-label="Left Align" onclick="logout()"> Logout</button>
+						</span> 
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -50,5 +56,13 @@
 		xhttp.setRequestHeader("userEmailId", sessionStorage.getItem("email"));
 		xhttp.setRequestHeader("callType", "SYNC_LABEL_SERVICE");
 		xhttp.send();
+	}
+	
+	function logout(){
+		sessionStorage.removeItem("id");
+		sessionStorage.removeItem("name");
+		sessionStorage.removeItem("imageURL");
+		sessionStorage.removeItem("email");
+		window.location = "index.html";
 	}
 </script>
