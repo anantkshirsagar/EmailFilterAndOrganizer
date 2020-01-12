@@ -1,17 +1,24 @@
 package com.emailfilter.tests;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.mortbay.log.Log;
+
+import com.emailfilter.model.FilterWrapper;
 import com.emailfilter.services.GmailService;
 import com.emailfilter.services.LabelService;
 import com.google.api.services.gmail.model.Label;
+import com.google.api.services.gmail.model.Message;
 
 public class LabelServiceTest {
-	
+
 	public static void main(String[] args) throws Exception {
 //		printGmailLabelsTest();
-		printUserDefinedLabels();
-		//createGmailLabelTest();
+//		printUserDefinedLabels();
+		printGmailLabelsTest();
+		// createGmailLabelTest();
 	}
 
 	public static void createGmailLabelTest() throws Exception {
@@ -27,12 +34,12 @@ public class LabelServiceTest {
 			System.out.println("Id: " + label.getId() + "  Name: " + label.getName());
 		}
 	}
-	
+
 	public static void printUserDefinedLabels() throws Exception {
 		LabelService labelService = new LabelService("icbm.iot@gmail.com", new GmailService().getGmailService());
 		List<Label> filteredLabel = labelService.getFilteredLabel();
 		for (Label label : filteredLabel) {
-			System.out.println("ID: " + label.getId() + "Label name: " +label.getName());
+			System.out.println("ID: " + label.getId() + ", Label name: " + label.getName());
 		}
 	}
 

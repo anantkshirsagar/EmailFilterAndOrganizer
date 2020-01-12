@@ -3,35 +3,34 @@ package com.emailfilter.tests;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dbmanager.util.DBUtils;
+import com.emailfilter.dbservices.DeleteFilterDBService;
 import com.emailfilter.dbservices.LabelDBService;
 import com.emailfilter.dbservices.LabelFilterDBService;
-import com.emailfilter.exceptions.DuplicateLabelException;
 import com.emailfilter.model.FilterWrapper;
-import com.emailfilter.model.GridLabelWrapper;
+import com.emailfilter.model.LabelGridWrapper;
 import com.emailfilter.model.LabelProperty;
-import com.emailfilter.utils.DatabaseUtils;
 
 public class DatabaseTest {
 	private static final Logger LOG = LoggerFactory.getLogger(DatabaseTest.class);
 
 	public static void main(String[] args) {
-//		checkLabelIsAlreadyPresent();
 		try {
+			checkLabelIsAlreadyPresent();
 //			 saveLabelTest();
 //			 deleteLabelTest();
 //			saveLabelFilterTest();
 //			updateLabel();
 //			updateLabelFilterTest();
 //			fetchLabelFilterDataById();
-			getLabelGridInfo();
+//			getLabelGridInfo();
+//			getLabelFilterByFilterName();
+			getDeletelFilterByFilterName();
+			
 		} catch (Exception e) {
 			LOG.error("Exception {}", e);
 		}
@@ -40,9 +39,10 @@ public class DatabaseTest {
 	public static void checkLabelIsAlreadyPresent() throws ClassNotFoundException, SQLException, IOException {
 		LabelProperty labelProperty = new LabelProperty();
 		labelProperty.setLabel("Label2");
-		DatabaseUtils.isDuplicateLabel(DatabaseUtils.getConnectionSettings(
-				"F:\\eclipse-nsg-workspace\\EmailFilterAndOrganizer\\resources\\sql_properties\\psql.properties"),
-				labelProperty);
+		labelProperty.setUserEmailId("icbm.iot@gmail.com");
+		LabelDBService dbService = new LabelDBService();
+		boolean duplicateLabel = dbService.isDuplicateLabel(labelProperty);
+		LOG.debug("isDuplicateLabel {}", duplicateLabel);
 	}
 
 	public static void saveLabelTest() throws ClassNotFoundException, SQLException {
@@ -73,14 +73,14 @@ public class DatabaseTest {
 		filterWrapper.setLabel("Label1");
 		filterWrapper.setSubjectFilter(false);
 		filterWrapper.setSubjectKeywords(Arrays.asList("subkey1, subkey2, subkey3"));
-		labelFilterService.saveLabelFilter(filterWrapper);
+		labelFilterService.saveLabelFilter(filterWrapper, "icbm.iot@gmail.com");
 	}
 
 	public static void fetchLabelFilterDataById() throws ClassNotFoundException, SQLException, IOException {
 		LabelFilterDBService labelFilterService = new LabelFilterDBService();
 		labelFilterService.getLabelFilterById(2);
 	}
-	
+
 	public static void updateLabel() throws ClassNotFoundException, SQLException {
 		LabelDBService labelDBService = new LabelDBService();
 		LabelProperty labelProperty = new LabelProperty();
@@ -101,13 +101,25 @@ public class DatabaseTest {
 		filterWrapper.setEmailIds(Arrays.asList("aaaaa@gmail.com", "bbbb@gmail.com", "cccccc@gmail.com"));
 		filterWrapper.setSubjectFilter(false);
 		filterWrapper.setSubjectKeywords(Arrays.asList("sub3, sub2, sub1"));
-		labelFilterService.updateLabelFilter(filterWrapper);
+		labelFilterService.updateLabelFilter(filterWrapper, "icbm.iot@gmail.com");
 	}
-	
+
 	public static void getLabelGridInfo() throws ClassNotFoundException, SQLException {
 		String userEmailId = "icbm.iot@gmail.com";
 		LabelDBService labelService = new LabelDBService();
-		List<GridLabelWrapper> labelGridInfo = labelService.getLabelGridInfo(userEmailId, "s");
+		List<LabelGridWrapper> labelGridInfo = labelService.getLabelGridInfo(userEmailId, "s");
 		LOG.debug("labelGridInfo {}", labelGridInfo);
+	}
+
+	public static void getLabelFilterByFilterName() throws ClassNotFoundException, SQLException, IOException {
+		LabelFilterDBService filterService = new LabelFilterDBService();
+		FilterWrapper filterWrapper = filterService.getLabelFilterByFilterName("Label filter by body", "icbm.iot@gmail.com");
+		LOG.debug("filterWrapper {}", filterWrapper);
+	}
+	
+	public static void getDeletelFilterByFilterName() throws ClassNotFoundException, SQLException, IOException {
+		DeleteFilterDBService filterService = new DeleteFilterDBService();
+		FilterWrapper filterWrapper = filterService.getDeleteFilterByFilterName("Delete filter by subject", "icbm.iot@gmail.com");
+		LOG.debug("filterWrapper {}", filterWrapper);
 	}
 }
