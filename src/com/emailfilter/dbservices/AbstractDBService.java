@@ -12,6 +12,7 @@ import com.emailfilter.manager.ConfigurationReader;
 import com.emailfilter.utils.DatabaseUtils;
 
 public abstract class AbstractDBService {
+	
 	protected AbstractConnectionSettings connectionSettings;
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractDBService.class);
 
