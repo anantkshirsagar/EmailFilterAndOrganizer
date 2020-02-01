@@ -189,7 +189,7 @@ function addRow(gridInfo) {
 		deleteButton.setAttribute('name', name);
 		deleteButton.setAttribute('onclick', 'deleteFilter(this.name)');
 		deleteButton.setAttribute('class', 'btn btn-default btn-danger');
-		deleteButtonTD.appendChild(deleteButton);	
+		deleteButtonTD.appendChild(deleteButton);
 		
 		var runButtonTD = document.createElement('td');
 		runButtonTD = tr.insertCell(6);
